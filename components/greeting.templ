@@ -1,0 +1,20 @@
+package components
+
+templ GreetingPanel() {
+	<section id="greeting">
+		<button
+			class="rounded-lg bg-emerald-800 px-4 py-2 text-white"
+			hx-get="/greeting"
+			hx-target="#greeting"
+			hx-swap="outerHTML"
+		>
+			Greet me
+		</button>
+	</section>
+}
+
+templ Greeting() {
+	<section id="greeting" class="rounded-xl bg-emerald-50 p-5">
+		<p class="font-semibold text-emerald-950">Hello from the server.</p>
+	</section>
+}

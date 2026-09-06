@@ -1,0 +1,36 @@
+package views
+
+import (
+	"github.com/SamuelAboelkhir/new_portfolio/components"
+)
+
+templ Home() {
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+        <title>Portfolio</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+        <script src="/public/htmx.min.js" defer></script>
+        <!-- Place favicon.ico in the root directory -->
+    <link rel="stylesheet" href="/public/styles.css"/>
+    </head>
+    <body class="min-h-screen bg-stone-50 text-stone-950">
+        <main class="mx-auto max-w-3xl px-6 py-20">
+            <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">
+                Go + templ + HTMX + Tailwind
+            </p>
+            <h1 class="mt-4 text-5xl font-bold tracking-tight">
+                Ship HTML. Keep the machinery small.
+            </h1>
+            <div id="greeting" class="mt-10">
+                @components.GreetingPanel()
+            </div>
+        </main>
+    </body>
+</html>
+}
