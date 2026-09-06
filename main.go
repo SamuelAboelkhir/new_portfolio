@@ -1,12 +1,27 @@
 package main
 
-// import (
-// 	"context"
-// 	"os"
-// )
+import (
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+)
+
+type apiConfig struct {
+	port         string
+	filePathRoot string
+	publicPath   string
+}
 
 func main() {
-	// component := hello("Samuel")
-	// component.Render(context.Background(), os.Create())
-	server()
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatal(err)
+	}
+	cfg := apiConfig{
+		port:         os.Getenv("PORT"),
+		filePathRoot: os.Getenv("FILE_PATH"),
+		publicPath:   os.Getenv("PUBLIC_PATH"),
+	}
+
+	server(&cfg)
 }
