@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/pprof"
 )
 
 func server(cfg *apiConfig) {
@@ -16,6 +17,11 @@ func server(cfg *apiConfig) {
 	mux.HandleFunc("GET /{$}", cfg.handlerHome)
 	mux.HandleFunc("GET /greeting", cfg.handleGreeting)
 
+	mux.HandleFunc("/debug/pprof/", pprof.Index)
+	mux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 	if err := http.ListenAndServe(":"+cfg.port, mux); err != nil {
 		log.Fatal(err)
 	}

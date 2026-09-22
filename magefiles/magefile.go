@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/joho/godotenv"
 	"github.com/magefile/mage/mg" // mg contains helpful utility functions, like Deps
 )
 
@@ -17,13 +18,15 @@ import (
 // If not set, running mage will list available targets
 // var Default = Build
 
+// Starts the tailwind and templ watchers, generating go files from templ files and starts the server
 func Dev() {
-	mg.Deps(Tailwind, Templ)
+	mg.Deps(Tailwind, Templ, Air)
 }
 
+// Generates styles.css and starts the tailwind watcher
 func Tailwind() error {
 	cmd := exec.Command(
-		"./bin/tailwindcss-linux-x64",
+		"tailwindcss",
 		"-i", "./views/css/styles.css",
 		"-o", "./public/styles.css",
 		"--watch",
@@ -37,6 +40,7 @@ func Tailwind() error {
 	return cmd.Run()
 }
 
+// Generates go files from templ files
 func Generate() error {
 	cmd := exec.Command("templ", "generate")
 	fmt.Println("Doing initial templ generation before running the server")
@@ -47,9 +51,24 @@ func Generate() error {
 	return cmd.Run()
 }
 
+// Starts the templ generator and watcher using AIR to watch the code base for file changes
+// Used port 7331 by default a the proxy server for templ
 func Templ() error {
-	cmd := exec.Command("templ", "generate", "--watch", "--proxy", "http://localhost:8080", "--cmd", "air")
+	godotenv.Load(".env")
+	url := fmt.Sprintf("http://localhost:%s", os.Getenv("PORT"))
+	cmd := exec.Command("templ", "generate", "--watch", "--proxy", url)
 	fmt.Println("Starting templ watcher")
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
+}
+
+func Air() error {
+	cmd := exec.Command("air")
+
+	fmt.Println("Starting air")
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
