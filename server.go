@@ -5,12 +5,16 @@ import (
 	"log"
 	"net/http"
 	"net/http/pprof"
+
+	"github.com/SamuelAboelkhir/new_portfolio/views"
+	"github.com/a-h/templ"
 )
 
 func server(cfg *apiConfig) {
 	fmt.Printf("Server started on port %s\n", cfg.port)
 	mux := http.NewServeMux()
 
+	mux.Handle("GET /", templ.Handler(views.Home()))
 	mux.Handle("/app/", http.StripPrefix("/app/", logsMiddleware(http.FileServer(http.Dir(cfg.filePathRoot)))))
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(cfg.publicPath))))
 
